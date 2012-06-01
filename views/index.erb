@@ -13,7 +13,7 @@
         this.person = ko.observable(data.person);
 
         this.audioUrl = function() {
-           return 'audioUrl=<%= music_url_base %>'+escape(self.song());
+           return 'audioUrl=<%= music_url_base %>'+encodeURIComponent(self.song());
         }
       }
 
