@@ -23,7 +23,7 @@ class Voter < Sinatra::Application
 	end
 
 	configure :production do
-		set :songs_glob, '/home/ted/denver_music/*'
+		set :songs_glob, '/home/ted/denver-music/*'
 	end
 	configure :development do
 		set :songs_glob, '/Users/alex/Code/voter/music/*'

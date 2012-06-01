@@ -65,8 +65,10 @@
       Now guess who submitted each song.
       <ul data-bind="foreach: votes">
         <li>
-          <select data-bind="options: $root.people(), value: person"></select>
-          <span data-bind="text: song"></span>
+          <div class="people-selects">
+            <select data-bind="options: $root.people(), value: person"></select>
+          </div>
+          <div class="song-names" data-bind="text: song"></div>
         </li>
       </ul>
     </div>
