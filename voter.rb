@@ -24,9 +24,11 @@ class Voter < Sinatra::Application
 
 	configure :production do
 		set :songs_glob, '/home/ted/denver-music/*'
+		set :music_url_base, 'http://temp.deanspot.org/denver-music/'
 	end
 	configure :development do
-		set :songs_glob, '/Users/alex/Code/voter/music/*'
+		set :songs_glob, '/Users/alex/Sites/vote-music/*'
+		set :music_url_base, 'http://localhost/~alex/vote-music/'
 	end
 
 	before do
@@ -57,7 +59,7 @@ class Voter < Sinatra::Application
 
 	get '/' do
 		headers 'Content-Type' => 'text/html'
-		erb :index
+		erb :index, :locals=>{:music_url_base=>settings.music_url_base}
 	end
 
 	post '/list/:name' do
