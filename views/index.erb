@@ -1,0 +1,82 @@
+<html>
+<head>
+  <link rel="stylesheet" href="/vote.css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="/knockout-2.1.0.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(function() {
+
+      // represents 1 row in the list.
+      function Vote(data) {
+        this.song = ko.observable(data.song);
+        this.person = ko.observable(data.person);
+      }
+
+      // represents the view as a whole
+      function VotesViewModel() {
+        var self = this;
+
+        this.saveMessage = ko.observable("Make your choices and save when done.");
+        this.listName = ko.observable();
+        // are we waiting for a 'load' click or a 'save' click?
+        this.dataLoaded = ko.observable(false);
+
+        this.people = ko.observableArray([]);
+        this.votes = ko.observableArray([]);
+
+        this.loadData = function() {
+          $.getJSON("/list/"+self.listName(), function(allData) {
+            // when we get new data, build a Vote from each item.
+            var mappedVotes = $.map(allData, function(item) { return new Vote(item) });
+            // set the list of votes
+            self.votes(mappedVotes);
+            self.dataLoaded(true);
+          });
+        }
+
+        this.saveData = function() {
+          $.post("/list/"+self.listName(), {"songs":ko.toJS(self.votes)}, function(data, textStatus, jqXHR) {
+            self.saveMessage('Saved! You can edit later by re-entering this list name.');
+          });
+        }
+
+        // this runs when the viewmodel is created.
+        $.getJSON("/people", function(allData) {
+          self.people(allData);
+        });
+      }
+
+      ko.applyBindings(new VotesViewModel());
+    });
+  </script>
+</head>
+<body>
+  <div id="container">
+
+    <div id="search" data-bind="visible: !dataLoaded()">
+      Make up a name for your list of picks.<br/>
+      You can re-enter a name you've already created to update your picks.<br/>
+      <input data-bind="value: listName"/><br/>
+      <button data-bind="click: loadData">Load</button>
+    </div>
+
+    <div id="list" data-bind="visible: dataLoaded()">
+      Your list is called "<span data-bind="text: listName"></span>".<br/>
+      Now guess who submitted each song.
+      <ul data-bind="foreach: votes">
+        <li>
+          <select data-bind="options: $root.people(), value: person"></select>
+          <span data-bind="text: song"></span>
+        </li>
+      </ul>
+    </div>
+
+    <div id="save" data-bind="visible: dataLoaded()">
+      <span data-bind="text: saveMessage"></span>
+      <br/><br/>
+      <button data-bind="click: saveData">Save</button>
+    </div>
+
+  </div>
+</body>
+</html>
