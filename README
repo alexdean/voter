@@ -1,0 +1,1 @@
+experiment with knockoutjs. reads a list of files in a directory and lets you guess who submitted each one. answers are saved to a sqlite database.
