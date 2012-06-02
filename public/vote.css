@@ -25,12 +25,18 @@ body {
 
 ul li {
   list-style-type: none;
-  background: #bf9c30;
   border-radius: 4px;
   border: solid #043c6b 1px;
   padding: 5px 20px;
   margin-bottom: 5px;
   clear: both;
+}
+
+.needs-vote {
+  background: #bf9c30;
+}
+.voted-on {
+  background: #8FB8DB;
 }
 
 input {

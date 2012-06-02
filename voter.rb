@@ -54,7 +54,18 @@ class Voter < Sinatra::Application
 			basename = File.basename(file)
 			out << {'song'=>basename, 'person'=>(current[basename] || '')}
 		end
-		out.to_json
+
+		# songs w/o people come first, then songs w/ people assigned.
+		final = out.sort_by do |item|
+			if item['person']==''
+				'0'+item['song'].downcase
+			else
+				'1'+item['song'].downcase
+			end
+		end
+
+
+		final.to_json
 	end
 
 	get '/' do
@@ -63,7 +74,6 @@ class Voter < Sinatra::Application
 	end
 
 	post '/list/:name' do
-		puts params.inspect
 		settings.db.transaction do
 			settings.db.execute "DELETE FROM votes WHERE list = ?", params[:name]
 			params[:songs].each do |key,value|

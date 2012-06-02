@@ -15,6 +15,9 @@
         this.audioUrl = function() {
            return 'audioUrl=<%= music_url_base %>'+encodeURIComponent(self.song());
         }
+        this.bgClass = function() {
+          return self.person() == '' ? 'needs-vote' : 'voted-on' ;
+        }
       }
 
       // represents the view as a whole
@@ -69,7 +72,7 @@
       Your list is called "<span data-bind="text: listName"></span>".<br/>
       Now guess who submitted each song.
       <ul data-bind="foreach: votes">
-        <li>
+        <li data-bind="attr: {class: bgClass()}">
           <div class="people-selects">
             <select data-bind="options: $root.people(), value: person"></select>
           </div>
