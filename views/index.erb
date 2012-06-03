@@ -1,7 +1,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="/vote.css"/>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="/jquery-1.7.2.min.js"></script>
   <script src="/knockout-2.1.0.js" type="text/javascript"></script>
   <script type="text/javascript">
     $(function() {
@@ -12,8 +12,8 @@
         this.song = ko.observable(data.song);
         this.person = ko.observable(data.person);
 
-        this.audioUrl = function() {
-           return 'audioUrl=<%= music_url_base %>'+encodeURIComponent(self.song());
+        this.audioUrl = function(baseUrl) {
+          return 'audioUrl='+baseUrl+encodeURIComponent(self.song());
         }
         this.bgClass = function() {
           return self.person() == '' ? 'needs-vote' : 'voted-on' ;
@@ -77,7 +77,7 @@
             <select data-bind="options: $root.people(), value: person"></select>
           </div>
           <div class="song-names" data-bind="text: song"></div>
-          <embed data-bind="attr: {flashvars: audioUrl()}" type="application/x-shockwave-flash" src="http://www.google.com/reader/ui/3523697345-audio-player.swf" width="400" height="27" quality="best"></embed>
+          <embed data-bind="attr: {flashvars: audioUrl('<%= music_url_base %>')}" type="application/x-shockwave-flash" src="http://www.google.com/reader/ui/3523697345-audio-player.swf" width="400" height="27" quality="best"></embed>
         </li>
       </ul>
     </div>
